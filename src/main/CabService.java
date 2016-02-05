@@ -5,10 +5,12 @@ import java.util.*;
 public class CabService {
 
     private final Cab NO_CAB = new Cab("NoCab");
+    private final LocationService locationService;
     private Map<String, List<Cab>> availableCabs;
 
-    public CabService(Map<String, List<Cab>> availableCabs) {
+    public CabService(Map<String, List<Cab>> availableCabs, LocationService locationService) {
         this.availableCabs = availableCabs;
+        this.locationService = locationService;
     }
 
     public Cab checkAvailabilityFor(Calendar bookingTime, String location) {
@@ -50,5 +52,10 @@ public class CabService {
         }else {
             availableCabs.remove(location);
         }
+    }
+
+    public Double endJourneyOf(Cab cab, String source) {
+        Double km = locationService.getDistanceTravelledByCabFrom(source, cab);
+        return new Bill(12.0).calculate(km);
     }
 }
